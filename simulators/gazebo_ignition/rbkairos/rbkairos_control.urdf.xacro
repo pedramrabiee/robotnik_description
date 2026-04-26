@@ -16,6 +16,30 @@
       </plugin>
     </gazebo>
 
+    <!-- VelocityControl plugin for direct holonomic base motion (bypasses wheel physics) -->
+    <!-- No reference attribute = attached at model level like gz_ros2_control -->
+    <gazebo>
+      <plugin
+        name="ignition::gazebo::systems::VelocityControl"
+        filename="libignition-gazebo-velocity-control-system.so">
+        <!-- Subscribes to /model/rbkairos/cmd_vel on ign transport -->
+      </plugin>
+    </gazebo>
+
+    <!-- OdometryPublisher for ground truth odometry from Gazebo -->
+    <gazebo>
+      <plugin
+        name="ignition::gazebo::systems::OdometryPublisher"
+        filename="libignition-gazebo-odometry-publisher-system.so">
+        <odom_frame>${prefix}odom</odom_frame>
+        <robot_base_frame>${prefix}base_footprint</robot_base_frame>
+        <odom_publish_frequency>50</odom_publish_frequency>
+        <!-- Enable TF publishing on Ignition transport -->
+        <odom_topic>model/${namespace}/odometry</odom_topic>
+        <tf_topic>model/${namespace}/tf</tf_topic>
+      </plugin>
+    </gazebo>
+
     <xacro:macro
       name="ros2_joint"
       params="interface jmin jmax name">
